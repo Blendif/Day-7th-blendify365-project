@@ -26,6 +26,11 @@ app.use('/api/services', serviceRoutes);
 const { errorHandler } = require('./middleware/errorHandler');
 app.use(errorHandler);
 
+const csurf = require('csurf');
+
+// CSRF Protection Middleware
+app.use(csurf({ cookie: true }));
+
 // Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
