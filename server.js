@@ -36,3 +36,8 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+// Define routes
+app.get('/', (req, res) => {
+  res.send('Blendify365 backend is running!');
+});
