@@ -1,0 +1,31 @@
+name: Deploy Frontend to Zeet
+
+on:
+  push:
+    branches:
+      - main  # Trigger workflow on pushes to the 'main' branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2  # Check out the repository
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'  # Set Node.js version for the frontend build
+
+      - name: Install dependencies
+        run: npm install  # Install dependencies for the React.js project
+
+      - name: Build frontend project
+        run: npm run build  # Build the React.js frontend
+
+      - name: Deploy to Zeet
+        uses: zeet-dev/zeet@v1
+        with:
+          api_key: ${{ secrets.ZEET_API_KEY }}  # Zeet API key stored in GitHub secrets
+          project: ${{ secrets.ZEET_PROJECT_ID_FRONTEND }}  # Zeet Project ID for the frontend
