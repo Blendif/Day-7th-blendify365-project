@@ -1,0 +1,39 @@
+name: Deploy Backend to Zeet
+
+on:
+  push:
+    branches:
+      - main  # Trigger on pushes to the 'main' branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2  # Checkout the code from the repository
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'  # Specify the Node.js version
+
+      - name: Install dependencies
+        run: npm install  # Install dependencies
+
+      - name: Run Tests
+        run: npm test  # Run tests (if you have any)
+
+      - name: Build project
+        run: npm run build  # Build your backend project (if applicable)
+
+      - name: Set environment variables for MongoDB and JWT
+        run: |
+          echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" >> .env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+
+      - name: Deploy to Zeet
+        uses: zeet-dev/zeet@v1
+        with:
+          api_key: ${{ secrets.ZEET_API_KEY }}  # Zeet API key stored in GitHub secrets
+          project: ${{ secrets.ZEET_PROJECT_ID }}  # Zeet Project ID stored in GitHub secrets
